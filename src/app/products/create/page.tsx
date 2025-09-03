@@ -1,21 +1,27 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { createProduct } from '@/app/lib/api'; 
+import { createProduct } from '@/app/lib/api';
 import ProductForm from '../components/ProductForm';
-import { ProductFormValues } from '@/app/types/product.type';
+import { ProductFormValues } from '@/app/types/product.type'; 
+import { showSuccessToast, showErrorToast, showLoadingToast, dismissToast } from '@/app/lib/toast';
 
 export default function CreateProductPage() {
   const router = useRouter();
 
   const handleSubmit = async (values: ProductFormValues) => {
+    const toastId = showLoadingToast('Creating product...');
+
     try {
       await createProduct(values);
+      dismissToast(toastId);
+      showSuccessToast('Product created successfully!');
       router.push('/products');
       router.refresh();
     } catch (error) {
+      dismissToast(toastId);
+      showErrorToast('Failed to create product');
       console.error('Failed to create product:', error);
-      alert('Failed to create product');
     }
   };
 

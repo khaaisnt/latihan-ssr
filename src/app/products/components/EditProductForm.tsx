@@ -3,7 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { updateProduct } from '@/app/lib/api';
 import ProductForm from './ProductForm';
-import { Product, ProductFormValues } from '@/app/types/product.type';
+import { Product, ProductFormValues } from '@/app/types/product.type'; 
+import { showSuccessToast, showErrorToast, showLoadingToast, dismissToast } from '@/app/lib/toast';
 
 interface EditProductFormProps {
   product: Product;
@@ -24,13 +25,18 @@ export default function EditProductForm({ product }: EditProductFormProps) {
   };
 
   const handleSubmit = async (values: ProductFormValues) => {
+    const toastId = showLoadingToast('Updating product...');
+
     try {
       await updateProduct(product.id.toString(), values);
+      dismissToast(toastId);
+      showSuccessToast('Product updated successfully!');
       router.push('/products');
       router.refresh();
     } catch (error) {
+      dismissToast(toastId);
+      showErrorToast('Failed to update product');
       console.error('Failed to update product:', error);
-      alert('Failed to update product');
     }
   };
 

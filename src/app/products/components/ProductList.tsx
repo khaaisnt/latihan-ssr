@@ -1,9 +1,15 @@
-'use client';
+"use client";
 
-import { Product } from '@/app/types/product.type';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { deleteProduct } from '@/app/lib/api';
+import { Product } from "@/app/types/product.type";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { deleteProduct } from "@/app/lib/api";
+import {
+  showSuccessToast,
+  showErrorToast,
+  showLoadingToast,
+  dismissToast,
+} from "@/app/lib/toast";
 
 interface ProductListProps {
   products: Product[];
@@ -13,17 +19,21 @@ export default function ProductList({ products }: ProductListProps) {
   const router = useRouter();
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this product?')) {
+    if (!confirm("Are you sure you want to delete this product?")) {
       return;
     }
 
+    const toastId = showLoadingToast("Deleting product...");
+
     try {
       await deleteProduct(id.toString());
-      alert('Product deleted successfully!');
-      router.refresh();
+      dismissToast(toastId);
+      showSuccessToast("Product deleted successfully!");
+      router.refresh(); // Refresh the page to get updated data
     } catch (error) {
-      console.error('Failed to delete product:', error);
-      alert('Failed to delete product');
+      dismissToast(toastId);
+      showErrorToast("Failed to delete product");
+      console.error("Failed to delete product:", error);
     }
   };
 
