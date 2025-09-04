@@ -1,10 +1,9 @@
 import Navbar from "@/components/layout/navbar";
 import type { Metadata } from "next";
-import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
-  title: "Indonesia Digital Learning",
-  description: "A platform for digital learning in Indonesia",
+  title: "Latihan SSR",
+  description: "Aplikasi SSR dengan Next.js 15",
 };
 
 export default function RootLayout({
