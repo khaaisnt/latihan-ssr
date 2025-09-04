@@ -1,5 +1,6 @@
 import ProductsList from './components/ProductList';
-import { productService } from '../lib/product';
+import { productService } from '@/app/lib/product';
+import { getServerCookie } from '@/app/helper/serverCookies';
 
 interface ProductsPageProps {
   searchParams: {
@@ -11,6 +12,19 @@ interface ProductsPageProps {
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+  const token = await getServerCookie('accessToken');
+  
+  if (!token) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+          <h2 className="font-bold">Authentication Required</h2>
+          <p>Please login to access products page.</p>
+        </div>
+      </div>
+    );
+  }
+
   const page = parseInt(searchParams.page || '1');
   const limit = parseInt(searchParams.limit || '10');
   const skip = (page - 1) * limit;
@@ -47,8 +61,3 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     );
   }
 }
-
-export const metadata = {
-  title: 'Products - DummyJSON',
-  description: 'Browse our amazing products collection',
-};

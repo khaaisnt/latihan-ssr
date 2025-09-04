@@ -6,8 +6,8 @@ import Providers from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Indonesia Digital Learning",
-  description: "User Management System",
+  title: "Latihan SSR",
+  description: "Aplikasi SSR dengan Next.js 15",
 };
 
 export default function RootLayout({
@@ -18,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
