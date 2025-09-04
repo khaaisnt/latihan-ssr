@@ -6,8 +6,8 @@ import Providers from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Product Management",
-  description: "Manage products with DummyJSON API",
+  title: "Indonesia Digital Learning",
+  description: "User Management System",
 };
 
 export default function RootLayout({
