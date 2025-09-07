@@ -1,6 +1,7 @@
 "use client";
 
 import { showErrorToast, showSuccessToast } from "@/app/lib/toast";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -28,8 +29,17 @@ const Navbar = () => {
 
   return (
     <div className="w-full bg-sky-600 text-white p-4 flex justify-between">
-      <div>
+      <div className="flex items-center gap-10">
         <h1 className="text-lg font-bold">Madura Central Store</h1>
+        <div className="text-sm font-medium">
+          <Link href="/products" className="hover:underline">
+            Products List
+          </Link>
+          <span className="mx-2">|</span>
+          <Link href="/products-table" className="hover:underline">
+            Products Table
+          </Link>
+        </div>
       </div>
       <div>
         <button

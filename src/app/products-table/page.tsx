@@ -1,8 +1,7 @@
-import ProductsList from "./components/ProductList";
+import ProductsTable from "./components/ProductsTable";
 import { productService } from "@/app/lib/product";
-import { getServerCookie } from "@/app/helper/serverCookies";
 
-interface ProductsPageProps {
+interface ProductsTablePageProps {
   searchParams: {
     page?: string;
     limit?: string;
@@ -11,24 +10,12 @@ interface ProductsPageProps {
   };
 }
 
-export default async function ProductsPage({
+export default async function ProductsTablePage({
   searchParams,
-}: ProductsPageProps) {
-  const token = await getServerCookie("accessToken");
-
-  if (!token) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
-          <h2 className="font-bold">Authentication Required</h2>
-          <p>Please login to access products page.</p>
-        </div>
-      </div>
-    );
-  }
-
+}: ProductsTablePageProps) {
   const page = parseInt(searchParams.page || "1");
   const limit = parseInt(searchParams.limit || "10");
+
   const skip = (page - 1) * limit;
 
   let productsData;
@@ -45,13 +32,15 @@ export default async function ProductsPage({
     }
 
     return (
-      <ProductsList
-        products={productsData.products}
-        total={productsData.total}
-        currentPage={page}
-        limit={limit}
-        searchParams={searchParams}
-      />
+      <div className="container mx-auto px-4 py-8">
+        <ProductsTable
+          products={productsData.products}
+          total={productsData.total}
+          currentPage={page}
+          itemsPerPage={limit}
+          searchParams={searchParams}
+        />
+      </div>
     );
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -67,6 +56,6 @@ export default async function ProductsPage({
 }
 
 export const metadata = {
-  title: "Latihan SSR - Products List",
-  description: "View all products in a structured list format",
+  title: "Latihan SSR - Products Table",
+  description: "View all products in a structured table format",
 };
