@@ -12,6 +12,7 @@ import {
   showSuccessToast,
 } from "@/app/lib/toast";
 import { deleteProduct } from "@/app/lib/api";
+import Pagination from "@/components/molecules/pagination";
 
 interface ProductsListProps {
   products: Product[];
@@ -110,62 +111,6 @@ export default function ProductsList({
   }, [debouncedSearch]);
 
   const totalPages = Math.ceil(total / limit);
-
-  const renderPagination = () => {
-    if (totalPages <= 1) return null;
-
-    const pages = [];
-    const maxVisiblePages = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
-
-    // Previous button
-    pages.push(
-      <button
-        key="prev"
-        onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className="px-3 py-2 border rounded disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        Previous
-      </button>
-    );
-
-    // Page numbers
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(
-        <button
-          key={i}
-          onClick={() => handlePageChange(i)}
-          className={`px-3 py-2 border rounded ${
-            currentPage === i
-              ? "bg-blue-600 text-white"
-              : "bg-white text-gray-700"
-          }`}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    // Next button
-    pages.push(
-      <button
-        key="next"
-        onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className="px-3 py-2 border rounded disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        Next
-      </button>
-    );
-
-    return pages;
-  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -311,18 +256,7 @@ export default function ProductsList({
           ))}
         </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between mt-8">
-            <div className="text-sm text-gray-700">
-              Showing {(currentPage - 1) * limit + 1} to{" "}
-              {Math.min(currentPage * limit, total)} of {total} products
-            </div>
-
-            <div className="flex space-x-2">{renderPagination()}</div>
-          </div>
-        )}
-
+        {/* Empty State */}
         {products.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">No products found</p>
@@ -331,6 +265,15 @@ export default function ProductsList({
             </p>
           </div>
         )}
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={total}
+          itemsPerPage={limit}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );
