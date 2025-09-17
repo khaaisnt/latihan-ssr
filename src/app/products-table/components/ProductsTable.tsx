@@ -77,6 +77,10 @@ export default function ProductsTable({
 
   const totalPages = Math.ceil(total / filters.itemsPerPage);
 
+  const getRowNumber = (index: number) => {
+    return (currentPage - 1) * filters.itemsPerPage + index + 1;
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       {/* Header */}
@@ -128,6 +132,9 @@ export default function ProductsTable({
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                No
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Product
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -151,8 +158,14 @@ export default function ProductsTable({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {products.map((product) => (
+            {products.map((product, index) => (
               <tr key={product.id} className="hover:bg-gray-50">
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm font-medium text-gray-900">
+                    {getRowNumber(index)}
+                  </div>
+                </td>
+
                 {/* Product Info */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
